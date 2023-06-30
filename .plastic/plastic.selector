@@ -1,0 +1,4 @@
+repository "CodoLunarLander@codo_coderson@cloud"
+  path "/"
+    br "/main"
+    co "/main"
