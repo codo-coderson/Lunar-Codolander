@@ -23,8 +23,14 @@ public class CameraSwitcher : MonoBehaviour
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
-    {
+    {        
         zoomedCamera.Priority = 10;
-        overallCamera.Priority = 5;
+        overallCamera.Priority = 5;    
     }
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        zoomedCamera.Priority = 5;
+        overallCamera.Priority = 10;
+    }
+       
 }

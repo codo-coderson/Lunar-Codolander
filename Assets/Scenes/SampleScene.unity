@@ -288,11 +288,11 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 0.3
-  far clip plane: 1000
+  near clip plane: 0.1
+  far clip plane: 5000
   field of view: 60
   orthographic: 1
-  orthographic size: 2
+  orthographic size: 5.3
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -316,7 +316,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 519420028}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.429, y: 0.386, z: -10}
+  m_LocalPosition: {x: -0.01, y: 0.03, z: -2.507117}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -467,10 +467,10 @@ PolygonCollider2D:
   m_AutoTiling: 0
   m_Points:
     m_Paths:
-    - - {x: -9.599999, y: 5.4}
-      - {x: -9.599999, y: -5.4}
-      - {x: 9.599999, y: -5.4}
-      - {x: 9.599999, y: 5.4}
+    - - {x: -9.573527, y: 5.4}
+      - {x: -9.573528, y: -5.4}
+      - {x: 9.467642, y: -5.3735285}
+      - {x: 9.467641, y: 5.4}
 --- !u!1 &792145349
 GameObject:
   m_ObjectHideFlags: 3
@@ -773,7 +773,7 @@ MonoBehaviour:
   - m_Script
   m_LockStageInInspector: 
   m_StreamingVersion: 20170927
-  m_Priority: 10
+  m_Priority: 5
   m_StandbyUpdate: 2
   m_LookAt: {fileID: 0}
   m_Follow: {fileID: 1152878645}
@@ -825,6 +825,7 @@ GameObject:
   - component: {fileID: 1306173618}
   - component: {fileID: 1306173617}
   - component: {fileID: 1306173619}
+  - component: {fileID: 1306173620}
   m_Layer: 0
   m_Name: Ground
   m_TagString: Untagged
@@ -1244,8 +1245,8 @@ EdgeCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 1.73}
-  m_EdgeRadius: 0
+  m_Offset: {x: 0, y: 0.81}
+  m_EdgeRadius: 0.76
   m_Points:
   - {x: -9.589355, y: -1.0080242}
   - {x: -9.400513, y: -1.6184211}
@@ -1452,3 +1453,17 @@ EdgeCollider2D:
   m_AdjacentEndPoint: {x: 0, y: 0}
   m_UseAdjacentStartPoint: 0
   m_UseAdjacentEndPoint: 0
+--- !u!114 &1306173620
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1306173612}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b91ff8b18a4ceab43bb4e9e24baf6f35, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  overallCamera: {fileID: 193862781}
+  zoomedCamera: {fileID: 1267339743}
