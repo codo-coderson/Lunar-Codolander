@@ -39,19 +39,26 @@ public class ShipController : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        Debug.Log("Vertical Speed: " + Mathf.Abs(ship.velocity.y) + "Horizontal Speed: " + Mathf.Abs(ship.velocity.x));
+
+        if (Input.GetKeyDown(KeyCode.W))
         {
             applyThrust = true;
             var emission = thruster.emission;
             emission.enabled = true;
-            if (!audioThrust.isPlaying) audioThrust.Play();
+            if (!audioThrust.isPlaying)
+            {
+                audioThrust.loop = true;
+                audioThrust.Play();
+            }
         }
-
-        if (Input.GetKeyUp(KeyCode.Space))
+        else if (Input.GetKeyUp(KeyCode.W))
         {
             applyThrust = false;
             var emission = thruster.emission;
             emission.enabled = false;
+            audioThrust.loop = false;
+            audioThrust.Stop();
         }
 
         float rotationInput = Input.GetAxis("Horizontal");
@@ -72,18 +79,25 @@ public class ShipController : MonoBehaviour
         ship.rotation += rotationAmount;
     }
 
-     private void OnCollisionEnter2D(Collision2D collision)
+    private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.otherCollider.GetType() == typeof(BoxCollider2D)) {
-            if (Mathf.Abs(ship.transform.rotation.z) > 0.01) shipCrashes();
-            else
-                //COMPRUEBA VELOCIDADES HORIZONTAL Y VERTICAL. SI ESTAN BIEN, land(), SI NO, CRASH();
-                shipLands();
-        }        
-        else
+
+        // If the ship lands with the landing gear
+        if (collision.otherCollider.GetType() == typeof(BoxCollider2D))
         {
-            shipCrashes();
+            // If it's straight
+            if (Mathf.Abs(ship.transform.rotation.z) < 0.02)
+            {
+                // if the speed is ok
+                if (Mathf.Abs(ship.velocity.x) < 0.015f && Mathf.Abs(ship.velocity.y) < 0.05f)
+                {
+                    shipLands();
+                }
+                else shipCrashes();
+            }
+            else shipCrashes();
         }
+        else shipCrashes();
     }
 
     private void shipCrashes()

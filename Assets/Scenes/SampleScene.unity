@@ -5476,7 +5476,7 @@ MonoBehaviour:
   rotationSpeed: 200
   thruster: {fileID: 204480838}
   crash: {fileID: 8300000, guid: a2ea580bf564f2d4b8fff815be8a5630, type: 3}
-  thrust: {fileID: 8300000, guid: b83b85172730e2848836d1df6eae455a, type: 3}
+  thrust: {fileID: 8300000, guid: fbc5112f830dd5f489a1cf43af48e0d6, type: 3}
   landed: {fileID: 8300000, guid: 3ba70e35e96281c47ab957c880572049, type: 3}
 --- !u!61 &1152878647
 BoxCollider2D:
