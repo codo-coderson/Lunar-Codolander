@@ -1,49 +1,55 @@
+﻿using System;
 using UnityEngine;
 
 public class ShipController : MonoBehaviour
 {
     private Rigidbody2D ship;
-    private PolygonCollider2D bodyCollider;
+    //private PolygonCollider2D bodyCollider;
+    //private BoxCollider2D leftLandingGearCollider;
+    //private CapsuleCollider2D rightLandingGearCollider;
+    private EdgeCollider2D landingGearCollider;
     public float rotationSpeed;
-
     public ParticleSystem thruster;
-    private bool shouldApplyForce;
-    public bool bang;
+    private bool applyThrust;
+    public AudioClip crash;
+    public AudioClip thrust;
+    public AudioClip landed;
+    AudioSource audioCrash;
+    AudioSource audioThrust;
+    AudioSource audioLanded;
 
-
-
-    public BoxCollider2D sideOfleftLeg;
-    public BoxCollider2D landingGear;
-    public BoxCollider2D sideOfRightLeg;
 
     private void Start()
     {
         ship = GetComponent<Rigidbody2D>();
-        bodyCollider = GetComponent<PolygonCollider2D>();
+        landingGearCollider = GetComponent<EdgeCollider2D>();
         thruster = GetComponentInChildren<ParticleSystem>();
         var emission = thruster.emission;
-        emission.enabled = false;        
-        shouldApplyForce = false;
-        bang = false;
+        emission.enabled = false;
+        applyThrust = false;
         rotationSpeed = 200f;
 
-        sideOfleftLeg = GetComponent<BoxCollider2D>();
-        landingGear = GetComponent<BoxCollider2D>();
-        sideOfRightLeg = GetComponent<BoxCollider2D>();
-}
+        audioCrash = gameObject.AddComponent<AudioSource>();
+        audioCrash.clip = crash;
+        audioThrust = gameObject.AddComponent<AudioSource>();
+        audioThrust.clip = thrust;
+        audioLanded = gameObject.AddComponent<AudioSource>();
+        audioLanded.clip = landed;
+    }
 
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            shouldApplyForce = true;
+            applyThrust = true;
             var emission = thruster.emission;
             emission.enabled = true;
+            if (!audioThrust.isPlaying) audioThrust.Play();
         }
 
         if (Input.GetKeyUp(KeyCode.Space))
         {
-            shouldApplyForce = false;
+            applyThrust = false;
             var emission = thruster.emission;
             emission.enabled = false;
         }
@@ -54,7 +60,7 @@ public class ShipController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (shouldApplyForce)
+        if (applyThrust)
         {
             ship.AddForce(transform.up * 0.3f, ForceMode2D.Force);
         }
@@ -66,33 +72,29 @@ public class ShipController : MonoBehaviour
         ship.rotation += rotationAmount;
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+     private void OnCollisionEnter2D(Collision2D collision)
     {
-
-        if (collision.collider == landingGear)
-        {
-            Debug.Log("Landed with landing gear!");
-        }
+        if (collision.otherCollider.GetType() == typeof(BoxCollider2D)) {
+            if (Mathf.Abs(ship.transform.rotation.z) > 0.01) shipCrashes();
+            else
+                //COMPRUEBA VELOCIDADES HORIZONTAL Y VERTICAL. SI ESTAN BIEN, land(), SI NO, CRASH();
+                shipLands();
+        }        
         else
         {
-            Debug.Log("NOT landed with landing gear!");
+            shipCrashes();
         }
+    }
 
-        // condition: the ship has to land straight
-        bool notRotated = Mathf.Abs(ship.transform.rotation.z) < 0.01;
-                
-        if (notRotated)
-        {
-            bang = false;
-            //Debug.Log("Z: " + Mathf.Abs(ship.transform.rotation.z));
-            Debug.Log("Bang: " + bang);
+    private void shipCrashes()
+    {
+        if (!audioCrash.isPlaying)
+        audioCrash.Play();
+    }
 
-        }
-        else
-        {
-            bang = true;
-            //Debug.Log("Z: " + Mathf.Abs(ship.transform.rotation.z));
-            Debug.Log("Bang: " + bang);
-        }
+    private void shipLands()
+    {
+        if (!audioLanded.isPlaying)
+            audioLanded.Play();
     }
 }
