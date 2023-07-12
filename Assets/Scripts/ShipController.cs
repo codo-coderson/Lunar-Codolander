@@ -54,11 +54,11 @@ public class ShipController : MonoBehaviour
         //InvokeRepeating("LogEverySecond", 0f, 1f);
     }
 
+    private bool canThrust = true;
+
     private void Update()
     {
-
-
-        if (Input.GetKeyDown(KeyCode.W))
+        if (Input.GetKeyDown(KeyCode.W) && canThrust)
         {
             applyThrust = true;
             var emission = thruster.emission;
@@ -211,9 +211,17 @@ public class ShipController : MonoBehaviour
         shipSprite.enabled = false;
         
         Rigidbody2D shipRigidbody = GetComponent<Rigidbody2D>();
-        // If I don't do this and I try to stop simulating the ship, then the virtual camera would switch to the overall camera
+        // If I try to stop simulating the ship, then the virtual camera would switch to the overall camera
         ship.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezePositionY;
-        //shipRigidbody.isKinematic = true;
+
+        // disable the thrust sound and the particle system, just in case the player tries to thrust
+        var emission = thruster.emission;        
+        emission.enabled = false;
+        audioThrust.Stop();
+        // flag to disable the thrust key
+        canThrust = false;
+        // get the damn ship to stop if it touched ground
+        shipRigidbody.isKinematic = true;
     }
 
     /*    void LogEverySecond()

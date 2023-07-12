@@ -5578,6 +5578,7 @@ GameObject:
   - component: {fileID: 1009041104}
   - component: {fileID: 1009041106}
   - component: {fileID: 1009041105}
+  - component: {fileID: 1009041107}
   m_Layer: 0
   m_Name: Capsule
   m_TagString: Untagged
@@ -5673,6 +5674,22 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!58 &1009041107
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1009041103}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 0.034600005
 --- !u!1 &1152878641
 GameObject:
   m_ObjectHideFlags: 0
@@ -6006,7 +6023,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1267339742
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6959,7 +6976,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 616247600806133839, guid: 5bca20a68dd147944b8a3cef1dae4dfd, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1882518072479236145, guid: 5bca20a68dd147944b8a3cef1dae4dfd, type: 3}
       propertyPath: m_RootOrder
