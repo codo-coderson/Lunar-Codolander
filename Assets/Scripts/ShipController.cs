@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using UnityEngine;
 
 public class ShipController : MonoBehaviour
@@ -19,6 +20,9 @@ public class ShipController : MonoBehaviour
     private bool xVelocityOK;
     private bool yVelocityOK;
     private bool isCollision = false;
+
+    public GameObject brokenPartsPrefab; // Assigned in the Inspector
+    public float brokenPartsForce; // Assigned in the Inspector
 
 
     private void Start()
@@ -153,10 +157,46 @@ public class ShipController : MonoBehaviour
         isCollision = false;
     }
 
+    private IEnumerator SetBrokenPartRotations(GameObject brokenParts)
+    {
+        yield return new WaitForSeconds(0.1f); // Wait for 0.1 seconds
+
+        foreach (Transform part in brokenParts.transform)
+        {
+            Rigidbody2D partRigidbody = part.GetComponent<Rigidbody2D>();
+
+            // Add a random z-axis rotation to the part
+            float randomZRotation = UnityEngine.Random.Range(-180f, 180f);
+            part.localRotation = Quaternion.Euler(0f, 0f, randomZRotation);
+
+            // Add a constant torque to the part
+            float torque = UnityEngine.Random.Range(-10f, 10f);
+            partRigidbody.AddTorque(torque, ForceMode2D.Impulse);
+        }
+    }
+
     private void shipCrashes()
     {
+        // Instantiate and activate (because it's inactive at the beginning) broken parts prefab at ship position
+        GameObject brokenParts = Instantiate(brokenPartsPrefab, transform.position, Quaternion.identity);
+        brokenParts.SetActive(true);
+
+        // Loop through each broken part and apply a force in random direction
+        foreach (Transform part in brokenParts.transform)
+        {
+            Rigidbody2D partRigidbody = part.GetComponent<Rigidbody2D>();
+            Vector2 randomDirection = new Vector2(UnityEngine.Random.Range(-1f, 1f), UnityEngine.Random.Range(-1f, 1f)).normalized;
+            partRigidbody.AddForce(randomDirection * brokenPartsForce, ForceMode2D.Impulse);
+        }
+
+        disableShip();
+
+        // Play explosion sound
         if (!audioCrash.isPlaying)
             audioCrash.Play();
+
+        // Set the broken part rotations and add torque to each part
+        StartCoroutine(SetBrokenPartRotations(brokenParts));
     }
 
     private void shipLands()
@@ -165,9 +205,19 @@ public class ShipController : MonoBehaviour
             audioLanded.Play();
     }
 
-
-/*    void LogEverySecond()
+    private void disableShip()
     {
-        Debug.Log("Frame count: " + frameCount + "Vertical Speed: " + Mathf.Abs(ship.velocity.y) + ", Horizontal Speed: " + Mathf.Abs(ship.velocity.x));
-    }*/
+        SpriteRenderer shipSprite = GetComponent<SpriteRenderer>();
+        shipSprite.enabled = false;
+        
+        Rigidbody2D shipRigidbody = GetComponent<Rigidbody2D>();
+        // If I don't do this and I try to stop simulating the ship, then the virtual camera would switch to the overall camera
+        ship.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezePositionY;
+        //shipRigidbody.isKinematic = true;
+    }
+
+    /*    void LogEverySecond()
+        {
+            Debug.Log("Frame count: " + frameCount + "Vertical Speed: " + Mathf.Abs(ship.velocity.y) + ", Horizontal Speed: " + Mathf.Abs(ship.velocity.x));
+        }*/
 }
