@@ -45,7 +45,7 @@ public class ShipController : MonoBehaviour
         audioLanded.clip = landed;
 
         // Let's set an initial x speed, currently for debugging purposes
-        Vector2 initialVelocity = new Vector2(0f, 0f);
+        Vector2 initialVelocity = new Vector2(0.025f, 0f);
         ship.velocity = initialVelocity;
         // This doesn't work --> ship.velocity.Set(0.06f, 0f);
 
@@ -101,7 +101,7 @@ public class ShipController : MonoBehaviour
         }
 
         rotationOK = (Mathf.Abs(ship.transform.rotation.z) < 0.02);
-        xVelocityOK = Mathf.Abs(ship.velocity.x) < 0.0008f;
+        xVelocityOK = Mathf.Abs(ship.velocity.x) < 0.026f;
         yVelocityOK = Mathf.Abs(ship.velocity.y) < 0.04f;
     }
 
