@@ -25,6 +25,7 @@ public class ShipController : MonoBehaviour
     private bool xVelocityOK;
     private bool yVelocityOK;
     private bool isCollision = false;
+    public TextMeshProUGUI endReasonText;
 
 
     public GameObject brokenPartsPrefab; // Assigned in the Inspector
@@ -45,6 +46,7 @@ public class ShipController : MonoBehaviour
         applyThrust = false;
         isCollision = false;
         rotationSpeed = 200f;
+        Fuel = 1000;
 
         audioCrash = gameObject.AddComponent<AudioSource>();
         audioCrash.clip = crash;
@@ -58,6 +60,8 @@ public class ShipController : MonoBehaviour
         ship.velocity = initialVelocity;
         // This doesn't work --> ship.velocity.Set(0.06f, 0f);
 
+        endReasonText.enabled = false;
+
         // Let's check the speed in the Console, every second
         //InvokeRepeating("LogEverySecond", 0f, 1f);
     }
@@ -66,7 +70,7 @@ public class ShipController : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.W) && canThrust)
+        if (Input.GetKeyDown(KeyCode.W) && canThrust && Fuel > 0)
         {
             applyThrust = true;
             var emission = thruster.emission;
@@ -77,7 +81,7 @@ public class ShipController : MonoBehaviour
                 audioThrust.Play();
             }
         }
-        else if (Input.GetKeyUp(KeyCode.W))
+        else if (Input.GetKeyUp(KeyCode.W) || Fuel <= 0)
         {
             applyThrust = false;
             var emission = thruster.emission;
@@ -88,6 +92,7 @@ public class ShipController : MonoBehaviour
 
         float rotationInput = Input.GetAxis("Horizontal");
         RotateShip(rotationInput);
+
     }
 
     private void FixedUpdate()
@@ -98,6 +103,13 @@ public class ShipController : MonoBehaviour
         if (applyThrust)
         {
             ship.AddForce(ship.transform.up * 0.3f, ForceMode2D.Force);
+            ship.AddForce(ship.transform.up * 0.3f, ForceMode2D.Force);
+            Fuel -= 1; // Reducir el combustible
+            if (Fuel <= 0)
+            {
+                Fuel = 0;
+                canThrust = false;
+            }
         }
 
         // Check if a number of frames have passed
@@ -114,14 +126,15 @@ public class ShipController : MonoBehaviour
             if (zoomedCamera.Priority == 10)
             {
                 speedDisplay.gameObject.SetActive(true);
+                // Update the speed text
+                speedDisplay.text = $"H = {Mathf.Abs(ship.velocity.x):0.000}\nV = {Mathf.Abs(ship.velocity.y):0.000}\nFuel = {Fuel}";
             }
             else
             {
-                speedDisplay.gameObject.SetActive(false);
+                speedDisplay.gameObject.SetActive(true);
             }
 
-            // Update the speed text
-            speedDisplay.text = $"H = {Mathf.Abs(ship.velocity.x):0.00}\nV = {Mathf.Abs(ship.velocity.y):0.00}";
+            
         }
 
         // Ensure speed text does not rotate with the ship
@@ -142,6 +155,7 @@ public class ShipController : MonoBehaviour
     }
 
     private bool hasCrashed = false;
+    public int Fuel = 1000; // Contador de combustible
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
@@ -158,34 +172,47 @@ public class ShipController : MonoBehaviour
         {
             if (rotationOK)
             {
-                if (xVelocityOK)
+                if (xVelocityOK && yVelocityOK)
                 {
-                    if (yVelocityOK)
-                    {
-                        shipLands();
-                    }
-                    else
-                    {
-                        shipCrashes();
-                        Debug.Log("Reason of crash: vertical speed");
-                    }
+                    shipLands();
+                    endReasonText.enabled = true;
+                    endReasonText.text = "Well done!";
+                    endReasonText.verticalAlignment = VerticalAlignmentOptions.Top;
                 }
-                else
+
+                else if (xVelocityOK && !yVelocityOK)
                 {
                     shipCrashes();
-                    Debug.Log("Reason of crash: horizontal speed");
+                    endReasonText.enabled = true;
+                    endReasonText.text = "Too much V";
+                
+                }
+                else if (!xVelocityOK && yVelocityOK)
+                {
+                    shipCrashes();
+                    endReasonText.enabled = true;
+                    endReasonText.text = "Too much H";
+                }
+
+                else if (!xVelocityOK && !yVelocityOK)
+                {
+                    shipCrashes();
+                    endReasonText.enabled = true;
+                    endReasonText.text = "Too much V & H";
                 }
             }
             else
             {
                 shipCrashes();
-                Debug.Log("Reason of crash: not straight");
+                endReasonText.enabled = true;
+                endReasonText.text = "Not straight";
             }
         }
         else
         {
             shipCrashes();
-            Debug.Log("Reason of crash: not landed with landing gear");
+            endReasonText.enabled = true;
+            endReasonText.text = "Please use landing gear";
         }
 
 
