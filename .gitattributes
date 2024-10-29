@@ -1,2 +1,2 @@
-# Auto detect text files and perform LF normalization
-* text=auto
+# Fuerza LF en todos los archivos de código, escenas y assets
+* text=auto eol=lf

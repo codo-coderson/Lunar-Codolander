@@ -46,7 +46,6 @@ public class ShipController : MonoBehaviour
         applyThrust = false;
         isCollision = false;
         rotationSpeed = 200f;
-        Fuel = 1000;
 
         audioCrash = gameObject.AddComponent<AudioSource>();
         audioCrash.clip = crash;

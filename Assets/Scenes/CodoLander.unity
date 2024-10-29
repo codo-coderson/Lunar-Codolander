@@ -6125,7 +6125,7 @@ MonoBehaviour:
   brokenPartsForce: 0.2
   speedDisplay: {fileID: 656469306}
   zoomedCamera: {fileID: 1267339743}
-  Fuel: 1000
+  Fuel: 300
 --- !u!61 &1152878647
 BoxCollider2D:
   m_ObjectHideFlags: 0
