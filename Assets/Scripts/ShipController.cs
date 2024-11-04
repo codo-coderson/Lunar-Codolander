@@ -183,21 +183,21 @@ public class ShipController : MonoBehaviour
                 {
                     shipCrashes();
                     endReasonText.enabled = true;
-                    endReasonText.text = "Too much V";
+                    endReasonText.text = "Too much Vertical Speed";
                 
                 }
                 else if (!xVelocityOK && yVelocityOK)
                 {
                     shipCrashes();
                     endReasonText.enabled = true;
-                    endReasonText.text = "Too much H";
+                    endReasonText.text = "Too much Horizontal Speed";
                 }
 
                 else if (!xVelocityOK && !yVelocityOK)
                 {
                     shipCrashes();
                     endReasonText.enabled = true;
-                    endReasonText.text = "Too much V & H";
+                    endReasonText.text = "You landed too hard";
                 }
             }
             else
@@ -255,7 +255,10 @@ public class ShipController : MonoBehaviour
 
         // Play explosion sound
         if (!audioCrash.isPlaying)
-            audioCrash.Play();
+            // let's lower the audio clip's volume
+            audioCrash.volume = 0.3f;
+        audioCrash.Play();
+
 
         // Set the broken part rotations and add torque to each part
         StartCoroutine(SetBrokenPartRotations(brokenParts));
