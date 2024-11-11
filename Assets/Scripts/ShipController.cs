@@ -92,6 +92,12 @@ public class ShipController : MonoBehaviour
         float rotationInput = Input.GetAxis("Horizontal");
         RotateShip(rotationInput);
 
+        // Go to next scene if player presses "N"
+        if (Input.GetKeyDown(KeyCode.N))
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        }
+
     }
 
     private void FixedUpdate()
