@@ -1,9 +1,11 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using TMPro;
+
 using Cinemachine;
-using UnityEngine.SceneManagement; // Added namespace
 
 public class ShipController : MonoBehaviour
 {
@@ -22,8 +24,9 @@ public class ShipController : MonoBehaviour
     private bool rotationOK;
     private bool xVelocityOK;
     private bool yVelocityOK;
-    // Removed isCollision variable
+    private bool isCollision = false;
     public TextMeshProUGUI endReasonText;
+
 
     public GameObject brokenPartsPrefab; // Assigned in the Inspector
     public float brokenPartsForce; // Assigned in the Inspector
@@ -31,9 +34,6 @@ public class ShipController : MonoBehaviour
     public TextMeshProUGUI speedDisplay; // UI Text to display speed
     public CinemachineVirtualCamera zoomedCamera; // Reference to the zoomed camera
 
-    private bool canThrust = true;
-    public int Fuel = 1000; // Fuel counter
-    private bool hasCrashed = false;
 
     private void Start()
     {
@@ -44,6 +44,7 @@ public class ShipController : MonoBehaviour
         var emission = thruster.emission;
         emission.enabled = false;
         applyThrust = false;
+        isCollision = false;
         rotationSpeed = 200f;
 
         audioCrash = gameObject.AddComponent<AudioSource>();
@@ -53,12 +54,18 @@ public class ShipController : MonoBehaviour
         audioLanded = gameObject.AddComponent<AudioSource>();
         audioLanded.clip = landed;
 
-        // Set an initial x speed
+        // Let's set an initial x speed
         Vector2 initialVelocity = new Vector2(UnityEngine.Random.Range(-0.5f, 0.5f), 0);
         ship.velocity = initialVelocity;
+        // This doesn't work --> ship.velocity.Set(0.06f, 0f);
 
         endReasonText.enabled = false;
+
+        // Let's check the speed in the Console, every second
+        //InvokeRepeating("LogEverySecond", 0f, 1f);
     }
+
+    private bool canThrust = true;
 
     private void Update()
     {
@@ -90,6 +97,7 @@ public class ShipController : MonoBehaviour
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
         }
+
     }
 
     private void FixedUpdate()
@@ -100,12 +108,21 @@ public class ShipController : MonoBehaviour
         if (applyThrust)
         {
             ship.AddForce(ship.transform.up * 0.3f, ForceMode2D.Force);
-            Fuel -= 1; // Reduce fuel
+            ship.AddForce(ship.transform.up * 0.3f, ForceMode2D.Force);
+            Fuel -= 1; // Reducir el combustible
             if (Fuel <= 0)
             {
                 Fuel = 0;
                 canThrust = false;
             }
+        }
+
+        // Check if a number of frames have passed
+        if (isCollision)
+        {
+            Debug.Log("---------------------------------------------------------------------------------------------------");
+            Debug.Log("Framecount: " + frameCount);
+            Debug.Log("V: " + Mathf.Abs(ship.velocity.y) + "\nH: " + Mathf.Abs(ship.velocity.x));
         }
 
         // Update the speed display UI only if zoomed camera is active
@@ -121,6 +138,8 @@ public class ShipController : MonoBehaviour
             {
                 speedDisplay.gameObject.SetActive(true);
             }
+
+            
         }
 
         // Ensure speed text does not rotate with the ship
@@ -140,10 +159,20 @@ public class ShipController : MonoBehaviour
         ship.rotation += rotationAmount;
     }
 
+    private bool hasCrashed = false;
+    public int Fuel = 1000; // Contador de combustible
+
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        // If the ship lands with the landing gear,
+        // and it's straight 
+        // and it's moving horizontally and vertically slow
+        // then the landing is right
+
         // If the ship has already crashed, then return
         if (hasCrashed) return;
+
+        isCollision = true;
 
         if (collision.otherCollider.GetType() == typeof(BoxCollider2D))
         {
@@ -156,11 +185,13 @@ public class ShipController : MonoBehaviour
                     endReasonText.text = "Well done!";
                     endReasonText.verticalAlignment = VerticalAlignmentOptions.Top;
                 }
+
                 else if (xVelocityOK && !yVelocityOK)
                 {
                     shipCrashes();
                     endReasonText.enabled = true;
                     endReasonText.text = "Too much Vertical Speed";
+                
                 }
                 else if (!xVelocityOK && yVelocityOK)
                 {
@@ -168,6 +199,7 @@ public class ShipController : MonoBehaviour
                     endReasonText.enabled = true;
                     endReasonText.text = "Too much Horizontal Speed";
                 }
+
                 else if (!xVelocityOK && !yVelocityOK)
                 {
                     shipCrashes();
@@ -189,6 +221,7 @@ public class ShipController : MonoBehaviour
             endReasonText.text = "Please use landing gear";
         }
 
+        isCollision = false;
         hasCrashed = true;
     }
 
@@ -212,11 +245,11 @@ public class ShipController : MonoBehaviour
 
     private void shipCrashes()
     {
-        // Instantiate and activate broken parts prefab at ship position
+        // Instantiate and activate (because it's inactive at the beginning) broken parts prefab at ship position
         GameObject brokenParts = Instantiate(brokenPartsPrefab, transform.position, Quaternion.identity);
         brokenParts.SetActive(true);
 
-        // Apply force to each broken part
+        // Loop through each broken part and apply a force in random direction
         foreach (Transform part in brokenParts.transform)
         {
             Rigidbody2D partRigidbody = part.GetComponent<Rigidbody2D>();
@@ -228,23 +261,31 @@ public class ShipController : MonoBehaviour
 
         // Play explosion sound
         if (!audioCrash.isPlaying)
+            // let's lower the audio clip's volume
             audioCrash.volume = 0.3f;
         audioCrash.Play();
 
+
         // Set the broken part rotations and add torque to each part
         StartCoroutine(SetBrokenPartRotations(brokenParts));
-
-        // Notify GameManager to handle life loss and scene reload
         GameManager.instance.LoseLife();
+        StartCoroutine(RestartSceneAfterDelay(2f));
     }
+
+    // Method to restart the scene after a delay
+    private IEnumerator RestartSceneAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
+    }
+
 
     private void shipLands()
     {
         if (!audioLanded.isPlaying)
             audioLanded.Play();
 
-        // Notify GameManager to handle level completion
-        GameManager.instance.LevelComplete();
+        StartCoroutine(RestartSceneAfterDelay(2f));
     }
 
     private void disableShip()
@@ -253,16 +294,21 @@ public class ShipController : MonoBehaviour
         shipSprite.enabled = false;
 
         Rigidbody2D shipRigidbody = GetComponent<Rigidbody2D>();
-        // Freeze the ship's movement
+        // If I try to stop simulating the ship, then the virtual camera would switch to the overall camera
         ship.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezePositionY;
 
-        // Disable thrust sound and particle system
+        // disable the thrust sound and the particle system, just in case the player tries to thrust
         var emission = thruster.emission;
         emission.enabled = false;
         audioThrust.Stop();
+        // flag to disable the thrust key
         canThrust = false;
-
-        // Stop physics simulation on the ship
+        // get the damn ship to stop if it touched ground
         shipRigidbody.isKinematic = true;
     }
+
+    /*    void LogEverySecond()
+        {
+            Debug.Log("Frame count: " + frameCount + "Vertical Speed: " + Mathf.Abs(ship.velocity.y) + ", Horizontal Speed: " + Mathf.Abs(ship.velocity.x));
+        }*/
 }

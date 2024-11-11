@@ -5,7 +5,7 @@ public class MainMenu : MonoBehaviour
 {
     public void Play()
     {
-        SceneManager.LoadScene("LanderLv1");
+        SceneManager.LoadScene("LanderLvTemplate");
     }
 
     public void Quit()

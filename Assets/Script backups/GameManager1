@@ -1,0 +1,57 @@
+using UnityEngine;
+using UnityEngine.SceneManagement;
+using System.Collections; // Necesario para IEnumerator
+
+public class GameManager : MonoBehaviour
+{
+    public static GameManager instance; // Singleton para tener solo una instancia
+
+    public int lives = 3; // Número de vidas inicial
+
+    private void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject); // Hace persistente este objeto
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    public void LoseLife()
+    {
+        int previousLives = lives;
+        lives--;
+        Debug.Log($"Vidas antes del crash: {previousLives}. Vidas restantes: {lives}");
+
+        if (lives <= 0)
+        {
+            GameOver();
+        }
+        else
+        {
+            StartCoroutine(ReloadLevelAfterDelay(2f)); // Iniciar corrutina para esperar 2 segundos antes de recargar
+        }
+    }
+
+    private void GameOver()
+    {
+        Debug.Log("Game Over");
+        ResetLives(); // Reiniciar el número de vidas
+        SceneManager.LoadScene("LanderMainMenu");
+    }
+
+    private IEnumerator ReloadLevelAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay); // Espera de 2 segundos
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    public void ResetLives()
+    {
+        lives = 3; // Restablecer las vidas a 3
+    }
+}

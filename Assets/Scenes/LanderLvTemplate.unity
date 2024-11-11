@@ -5370,7 +5370,7 @@ RectTransform:
   m_GameObject: {fileID: 494882511}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.62544715, y: 0.62544715, z: 0.62544715}
+  m_LocalScale: {x: 0.6033376, y: 0.6033376, z: 0.6033376}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2093358654}
@@ -5378,8 +5378,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 331.3, y: -172.2}
-  m_SizeDelta: {x: 200, y: 50}
+  m_AnchoredPosition: {x: 329.94775, y: -172.4}
+  m_SizeDelta: {x: 200.4806, y: 20.6928}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &494882513
 MonoBehaviour:
@@ -5401,9 +5401,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'WASD TO OPERATE
-
-    N FOR NEXT LEVEL'
+  m_text: PRESS N FOR NEXT LEVEL
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 3cb40ec177366f14c8a4f7631f161c03, type: 2}
   m_sharedMaterial: {fileID: 2480899376459430642, guid: 3cb40ec177366f14c8a4f7631f161c03, type: 2}
@@ -5430,8 +5428,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 14.59
-  m_fontSizeBase: 14.59
+  m_fontSize: 10.88
+  m_fontSizeBase: 10.88
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -5466,7 +5464,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_margin: {x: 0, y: 0, z: 0, w: 0.000024784307}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -7704,3 +7702,48 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
+--- !u!1 &2121708578
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2121708579}
+  - component: {fileID: 2121708580}
+  m_Layer: 0
+  m_Name: GameManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2121708579
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2121708578}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 692.5127, y: 531.805, z: -0.9603487}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 8
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2121708580
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2121708578}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 17fcc020da37654499dd3ad91e29bd5d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lives: 3
