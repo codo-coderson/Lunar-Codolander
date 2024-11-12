@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
 using Cinemachine;
 using UnityEngine.SceneManagement; // Added namespace
@@ -22,18 +21,19 @@ public class ShipController : MonoBehaviour
     private bool rotationOK;
     private bool xVelocityOK;
     private bool yVelocityOK;
-    // Removed isCollision variable
-    public TextMeshProUGUI endReasonText;
-
-    public GameObject brokenPartsPrefab; // Assigned in the Inspector
-    public float brokenPartsForce; // Assigned in the Inspector
-
-    public TextMeshProUGUI speedDisplay; // UI Text to display speed
-    public CinemachineVirtualCamera zoomedCamera; // Reference to the zoomed camera
-
     private bool canThrust = true;
     public int Fuel = 1000; // Fuel counter
     private bool hasCrashed = false;
+
+    // Reference to the Cinemachine virtual camera
+    public CinemachineVirtualCamera zoomedCamera; // Reference to the zoomed camera
+
+    // Speed display UI (handled by the ship)
+    public TextMeshProUGUI speedDisplay; // UI Text to display speed
+
+    // Variables for broken parts
+    public GameObject brokenPartsPrefab; // Assigned in the Inspector
+    public float brokenPartsForce; // Assigned in the Inspector
 
     private void Start()
     {
@@ -56,13 +56,11 @@ public class ShipController : MonoBehaviour
         // Set an initial x speed
         Vector2 initialVelocity = new Vector2(UnityEngine.Random.Range(-0.5f, 0.5f), 0);
         ship.velocity = initialVelocity;
-
-        endReasonText.enabled = false;
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.W) && canThrust && Fuel > 0)
+        if (Input.GetKeyDown(KeyCode.UpArrow) && canThrust && Fuel > 0)
         {
             applyThrust = true;
             var emission = thruster.emission;
@@ -73,7 +71,7 @@ public class ShipController : MonoBehaviour
                 audioThrust.Play();
             }
         }
-        else if (Input.GetKeyUp(KeyCode.W) || Fuel <= 0)
+        else if (Input.GetKeyUp(KeyCode.UpArrow) || Fuel <= 0)
         {
             applyThrust = false;
             var emission = thruster.emission;
@@ -84,12 +82,6 @@ public class ShipController : MonoBehaviour
 
         float rotationInput = Input.GetAxis("Horizontal");
         RotateShip(rotationInput);
-
-        // Go to next scene if player presses "N"
-        if (Input.GetKeyDown(KeyCode.N))
-        {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
-        }
     }
 
     private void FixedUpdate()
@@ -108,24 +100,13 @@ public class ShipController : MonoBehaviour
             }
         }
 
-        // Update the speed display UI only if zoomed camera is active
+        // Update the speed display UI
         if (speedDisplay != null)
         {
-            if (zoomedCamera.Priority == 10)
-            {
-                speedDisplay.gameObject.SetActive(true);
-                // Update the speed text
-                speedDisplay.text = $"H = {Mathf.Abs(ship.velocity.x):0.000}\nV = {Mathf.Abs(ship.velocity.y):0.000}\nFuel = {Fuel}";
-            }
-            else
-            {
-                speedDisplay.gameObject.SetActive(true);
-            }
-        }
-
-        // Ensure speed text does not rotate with the ship
-        if (speedDisplay != null)
-        {
+            speedDisplay.gameObject.SetActive(true);
+            // Update the speed text
+            speedDisplay.text = $"H = {Mathf.Abs(ship.velocity.x):0.000}\nV = {Mathf.Abs(ship.velocity.y):0.000}\nFuel = {Fuel}";
+            // Ensure speed text does not rotate with the ship
             speedDisplay.rectTransform.rotation = Quaternion.identity;
         }
 
@@ -152,41 +133,34 @@ public class ShipController : MonoBehaviour
                 if (xVelocityOK && yVelocityOK)
                 {
                     shipLands();
-                    endReasonText.enabled = true;
-                    endReasonText.text = "Well done!";
-                    endReasonText.verticalAlignment = VerticalAlignmentOptions.Top;
+                    UIManager.instance?.ShowEndReason("Well done!");
                 }
                 else if (xVelocityOK && !yVelocityOK)
                 {
                     shipCrashes();
-                    endReasonText.enabled = true;
-                    endReasonText.text = "Too much Vertical Speed";
+                    UIManager.instance?.ShowEndReason("Too much Vertical Speed");
                 }
                 else if (!xVelocityOK && yVelocityOK)
                 {
                     shipCrashes();
-                    endReasonText.enabled = true;
-                    endReasonText.text = "Too much Horizontal Speed";
+                    UIManager.instance?.ShowEndReason("Too much Horizontal Speed");
                 }
                 else if (!xVelocityOK && !yVelocityOK)
                 {
                     shipCrashes();
-                    endReasonText.enabled = true;
-                    endReasonText.text = "You landed too hard";
+                    UIManager.instance?.ShowEndReason("Too fast");
                 }
             }
             else
             {
                 shipCrashes();
-                endReasonText.enabled = true;
-                endReasonText.text = "Not straight";
+                UIManager.instance?.ShowEndReason("Not straight");
             }
         }
         else
         {
             shipCrashes();
-            endReasonText.enabled = true;
-            endReasonText.text = "Please use landing gear";
+            UIManager.instance?.ShowEndReason("Please use landing gear");
         }
 
         hasCrashed = true;
