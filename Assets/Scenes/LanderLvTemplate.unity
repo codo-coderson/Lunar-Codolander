@@ -336,7 +336,7 @@ MonoBehaviour:
   m_Follow: {fileID: 0}
   m_Lens:
     FieldOfView: 60
-    OrthographicSize: 4
+    OrthographicSize: 5.38
     NearClipPlane: 0.1
     FarClipPlane: 5000
     Dutch: 0
@@ -360,9 +360,9 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 193862780}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.05, y: -0.07, z: -2.507117}
+  m_LocalPosition: {x: -0.01, y: -0.73, z: -2.507117}
   m_LocalScale: {x: 1.6187, y: 1.6187, z: 1.6187}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 382887656}
   m_Father: {fileID: 0}
@@ -5378,7 +5378,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -208.1556, y: 22.5899}
+  m_AnchoredPosition: {x: -208.15576, y: 22.589844}
   m_SizeDelta: {x: 260.3469, y: -31.2014}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &494882513
@@ -5532,7 +5532,7 @@ Camera:
   far clip plane: 5000
   field of view: 60
   orthographic: 1
-  orthographic size: 4
+  orthographic size: 5.38
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -5556,7 +5556,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 519420028}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.05, y: -0.07, z: -2.507117}
+  m_LocalPosition: {x: -0.01, y: -0.73, z: -2.507117}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -5811,7 +5811,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 732199715}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.03, y: -0.03, z: 0}
+  m_LocalPosition: {x: 0.0168, y: -0.7283, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5843,7 +5843,7 @@ PolygonCollider2D:
   m_AutoTiling: 0
   m_Points:
     m_Paths:
-    - - {x: -9.402143, y: 5.26075}
+    - - {x: -9.37932, y: 5.350932}
       - {x: -9.426369, y: -5.3288097}
       - {x: 9.467642, y: -5.3735285}
       - {x: 9.467641, y: 5.4}
@@ -5882,7 +5882,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 5.5013, y: -88.2}
+  m_AnchoredPosition: {x: 5.5013, y: -88.200195}
   m_SizeDelta: {x: 252.6187, y: 49.4892}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &750768453
@@ -6392,7 +6392,7 @@ MonoBehaviour:
   crash: {fileID: 8300000, guid: a2ea580bf564f2d4b8fff815be8a5630, type: 3}
   thrust: {fileID: 8300000, guid: fbc5112f830dd5f489a1cf43af48e0d6, type: 3}
   landed: {fileID: 8300000, guid: 3ba70e35e96281c47ab957c880572049, type: 3}
-  Fuel: 300
+  Fuel: 3000
   zoomedCamera: {fileID: 1267339743}
   speedDisplay: {fileID: 656469306}
   brokenPartsPrefab: {fileID: 1212691350}
@@ -7575,7 +7575,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 5.5013, y: -170.2546}
+  m_AnchoredPosition: {x: 5.5013, y: -170.2544}
   m_SizeDelta: {x: 218.3909, y: 49.9999}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1755829025
