@@ -15,9 +15,11 @@ public class ShipController : MonoBehaviour
     public AudioClip crash;
     public AudioClip thrust;
     public AudioClip landed;
+    public AudioClip fuelWarning;
     AudioSource audioCrash;
     AudioSource audioThrust;
     AudioSource audioLanded;
+    AudioSource audioFuelWarning;
     private bool rotationOK;
     private bool xVelocityOK;
     private bool yVelocityOK;
@@ -52,6 +54,8 @@ public class ShipController : MonoBehaviour
         audioThrust.clip = thrust;
         audioLanded = gameObject.AddComponent<AudioSource>();
         audioLanded.clip = landed;
+        audioFuelWarning = gameObject.AddComponent<AudioSource>();
+        audioFuelWarning.clip = fuelWarning;
 
         // Set an initial x speed
         Vector2 initialVelocity = new Vector2(UnityEngine.Random.Range(-0.5f, 0.5f), 0);
@@ -60,6 +64,12 @@ public class ShipController : MonoBehaviour
 
     private void Update()
     {
+        // if fuel is between 200 and 1, play sound "fuelWarning.wav" every 1 second
+        if (Fuel <= 200 && Fuel > 0 && frameCount % 60 == 0)
+        {
+            audioFuelWarning.Play();
+        }
+
         if (Input.GetKeyDown(KeyCode.UpArrow) && canThrust && Fuel > 0)
         {
             applyThrust = true;
@@ -123,9 +133,20 @@ public class ShipController : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        // If the ship has already crashed, then return
+        // Si la nave ya se estrelló, salir
         if (hasCrashed) return;
 
+        // Obtener el Tag del objeto con el que hemos colisionado
+        string collidedTag = collision.gameObject.tag;
+
+        if (collidedTag == "Boundary")
+        {
+            // Colisión con Boundary: no hacer nada especial, dejar que la física maneje el rebote
+            // Opcional: puedes reproducir un sonido o efecto aquí
+            return;
+        }
+
+        // Lógica existente para manejar colisiones con el suelo lunar
         if (collision.otherCollider.GetType() == typeof(BoxCollider2D))
         {
             if (rotationOK)
@@ -133,17 +154,17 @@ public class ShipController : MonoBehaviour
                 if (xVelocityOK && yVelocityOK)
                 {
                     shipLands();
-                    UIManager.instance?.ShowEndReason("Well done!");
+                    UIManager.instance?.ShowEndReason("Well done");
                 }
                 else if (xVelocityOK && !yVelocityOK)
                 {
                     shipCrashes();
-                    UIManager.instance?.ShowEndReason("Too much Vertical Speed");
+                    UIManager.instance?.ShowEndReason("Too much vertical speed");
                 }
                 else if (!xVelocityOK && yVelocityOK)
                 {
                     shipCrashes();
-                    UIManager.instance?.ShowEndReason("Too much Horizontal Speed");
+                    UIManager.instance?.ShowEndReason("Too much horizontal speed");
                 }
                 else if (!xVelocityOK && !yVelocityOK)
                 {
@@ -165,6 +186,7 @@ public class ShipController : MonoBehaviour
 
         hasCrashed = true;
     }
+
 
     private IEnumerator SetBrokenPartRotations(GameObject brokenParts)
     {
