@@ -64,7 +64,6 @@ public class ShipController : MonoBehaviour
 
     private void Update()
     {
-        // if fuel is between 200 and 1, play sound "fuelWarning.wav" every 1 second
         if (Fuel <= 200 && Fuel > 0 && frameCount % 60 == 0)
         {
             audioFuelWarning.Play();
@@ -154,7 +153,7 @@ public class ShipController : MonoBehaviour
                 if (xVelocityOK && yVelocityOK)
                 {
                     shipLands();
-                    UIManager.instance?.ShowEndReason("Well done");
+                    UIManager.instance?.ShowEndReason("Well done");                    
                 }
                 else if (xVelocityOK && !yVelocityOK)
                 {
@@ -175,13 +174,13 @@ public class ShipController : MonoBehaviour
             else
             {
                 shipCrashes();
-                UIManager.instance?.ShowEndReason("Not straight");
+                UIManager.instance?.ShowEndReason("Not straight, not flat or too fast");
             }
         }
         else
         {
             shipCrashes();
-            UIManager.instance?.ShowEndReason("Please use landing gear");
+            UIManager.instance?.ShowEndReason("Not straight, not flat or too fast");
         }
 
         hasCrashed = true;
