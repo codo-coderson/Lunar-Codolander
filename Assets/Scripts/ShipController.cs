@@ -16,10 +16,12 @@ public class ShipController : MonoBehaviour
     public AudioClip thrust;
     public AudioClip landed;
     public AudioClip fuelWarning;
+    public AudioClip warp;
     AudioSource audioCrash;
     AudioSource audioThrust;
     AudioSource audioLanded;
     AudioSource audioFuelWarning;
+    AudioSource audioWarp;
     private bool rotationOK;
     private bool xVelocityOK;
     private bool yVelocityOK;
@@ -56,6 +58,8 @@ public class ShipController : MonoBehaviour
         audioLanded.clip = landed;
         audioFuelWarning = gameObject.AddComponent<AudioSource>();
         audioFuelWarning.clip = fuelWarning;
+        audioWarp = gameObject.AddComponent<AudioSource>();
+        audioWarp.clip = warp;
 
         // Set an initial x speed
         Vector2 initialVelocity = new Vector2(UnityEngine.Random.Range(-0.5f, 0.5f), 0);
@@ -64,6 +68,14 @@ public class ShipController : MonoBehaviour
 
     private void Update()
     {
+
+        // Si el jugador pulsa N, cargar la siguiente escena
+        if (Input.GetKeyDown(KeyCode.N))
+        {
+            audioWarp.Play();
+            GameManager.instance.LevelComplete();
+        }
+
         if (Fuel <= 200 && Fuel > 0 && frameCount % 60 == 0)
         {
             audioFuelWarning.Play();
