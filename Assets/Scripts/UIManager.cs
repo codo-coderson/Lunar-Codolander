@@ -8,6 +8,8 @@ public class UIManager : MonoBehaviour
     public TextMeshProUGUI endReasonText;
     public TextMeshProUGUI nForNextLevelText;
     public TextMeshProUGUI instructionsText;
+    public TextMeshProUGUI shipsLeftText;
+
 
     private void Awake()
     {
@@ -26,6 +28,12 @@ public class UIManager : MonoBehaviour
 
     private void Start()
     {
+
+        if (shipsLeftText != null)
+        {
+            shipsLeftText.text = $"SHIPS LEFT: {GameManager.instance.lives}";
+        }
+
         // Ensure that the end reason text is disabled at the start
         if (endReasonText != null)
         {
@@ -52,6 +60,15 @@ public class UIManager : MonoBehaviour
         }*/
     }
 
+    public void UpdateShipsLeft()
+    {
+        if (shipsLeftText != null)
+        {
+            shipsLeftText.text = $"SHIPS LEFT: {GameManager.instance.lives}";
+        }
+    }
+
+
     // Method to show the end reason
     public void ShowEndReason(string reason)
     {
@@ -69,24 +86,6 @@ public class UIManager : MonoBehaviour
         if (endReasonText != null)
         {
             endReasonText.enabled = false;
-        }
-    }
-
-    // Method to show the N for Next Level text
-    public void ShowNForNextLevel()
-    {
-        if (nForNextLevelText != null)
-        {
-            nForNextLevelText.enabled = true;
-        }
-    }
-
-    // Method to hide the N for Next Level text
-    public void HideNForNextLevel()
-    {
-        if (nForNextLevelText != null)
-        {
-            nForNextLevelText.enabled = false;
         }
     }
 

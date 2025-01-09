@@ -12,18 +12,21 @@ EditorBuildSettings:
     path: Assets/Scenes/LanderMainMenu.unity
     guid: 514fcbcc480494b41930bfb6d72a03be
   - enabled: 0
-    path: Assets/Scenes/LanderLvTemplate.unity
+    path: Assets/Scenes/LanderLvTemplateBackup.unity
     guid: 034dc14a8708fd641a1acada274bbfa5
   - enabled: 1
     path: Assets/Scenes/LanderLv1.unity
     guid: d1ff1deb4bc7781409e3d69dfba7e876
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/LanderLv2.unity
     guid: df15cdbf68b26a7478c74ddf52a816d6
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/LanderLv3.unity
     guid: e6ad6f673fc4048419ce1aa5eb3d86a8
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/LanderLv4.unity
     guid: 74781e79641cc3d40b6f714e030f3ef6
+  - enabled: 1
+    path: Assets/Scenes/LanderLv1 1.unity
+    guid: 5f063ab2fcf68b54fbd8d633db573f9f
   m_configObjects: {}
